@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Api;
 
-use App\Page;
+use App\Book;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-class PageController extends Controller
+class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -41,10 +42,10 @@ class PageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Page  $page
+     * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function show(Page $page)
+    public function show(Book $book)
     {
         //
     }
@@ -52,10 +53,10 @@ class PageController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Page  $page
+     * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function edit(Page $page)
+    public function edit(Book $book)
     {
         //
     }
@@ -64,10 +65,10 @@ class PageController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Page  $page
+     * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Page $page)
+    public function update(Request $request, Book $book)
     {
         //
     }
@@ -75,10 +76,10 @@ class PageController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Page  $page
+     * @param  \App\Book  $book
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Page $page)
+    public function destroy(Book $book)
     {
         //
     }

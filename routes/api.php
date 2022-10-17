@@ -14,12 +14,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::login("login","Auth\LoginController@login");
+Route::post("/login","Auth\LoginController@login");
 
-Route::group(['middleware' => "auth:api"],function(){
+Route::group(['middleware' => "auth:api","namespace" => "Api"],function(){
     Route::resource("user","UserController");
 });
