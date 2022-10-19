@@ -11,8 +11,7 @@ class Book extends Model
     protected $guarded = [];
 
 
-    public static function boot()
-    {
+    public static function boot(){
        parent::boot();
        static::creating(function($model)
        {
@@ -29,6 +28,9 @@ class Book extends Model
 
 
     public function categories(){
-        $this->belongsToMany(Category::class,CategoryBook::class);
+       return $this->belongsToMany(Category::class,CategoryBook::class);
+    }
+    public function pages(){
+        return $this->hasMany(Page::class,'book_id','id');
     }
 }

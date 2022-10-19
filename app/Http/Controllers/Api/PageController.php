@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use App\http\Helpers\ApiResponse;
 use App\Page;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class PageController extends Controller
 {
@@ -37,6 +39,26 @@ class PageController extends Controller
     public function store(Request $request)
     {
         //
+
+        $validated = Validator::make($request->all(),[
+            "name" => "required|max:191",
+        ]);
+        if($validated->fails()){
+            return ApiResponse::validatorFail($validated);
+        }
+
+        try{
+            $page = Page::create([
+                'name' => $request->name,
+            ]);
+
+            return ApiResponse::success("Page created successfully!",200,$page);
+        }catch(\Exception $e){
+            return ApiResponse::fail("Exception",400,$e->getMessage());
+        }
+
+
+
     }
 
     /**

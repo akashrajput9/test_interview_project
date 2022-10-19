@@ -4,6 +4,7 @@ use App\Book;
 use App\Category;
 use App\CategoryBook;
 use App\http\Helpers\AuthHelper;
+use Carbon\Carbon;
 use Illuminate\Database\Seeder;
 
 class BookSeeder extends Seeder
@@ -23,6 +24,8 @@ class BookSeeder extends Seeder
             $category->books()->create([
                 "book_name" => "7 Habits of highly effective people",
                 "author_name" => "Stephen R. Covey",
+                'created_at' => Carbon::now(),
+                'updated_at' => Carbon::now(),
             ]);
         }
         // Book::firstOrCreate([

@@ -17,9 +17,7 @@ class PageSeeder extends Seeder
         //
         $books = Book::get();
         foreach($books as $book){
-            $prevPage = Page::where('book_id',$book->id)->orderBy("book_id","desc")->first();
-            Page::create([
-                'page_no' => $prevPage?$prevPage->id:1,
+            $book->pages()->create([
                 'name' => Str::random(40),
             ]);
 
