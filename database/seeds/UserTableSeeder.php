@@ -1,5 +1,6 @@
 <?php
 
+use App\Role;
 use App\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -15,15 +16,30 @@ class UserTableSeeder extends Seeder
     public function run()
     {
         //
+
+        $role = Role::create([
+            'name' => 'Admin',
+        ]);
+
         $token = Str::random(80);
-        $user = User::create([
+        $role->users()->create([
             'api_token' => hash('sha256', $token),
-            'name' => "Akash Ahmed",
-            'email' => "akashrajput9@hotmail.com",
+            'name' => "Akash Admin",
+            'email' => "admin@hotmail.com",
             'password' => Hash::make("admin12345"),
         ]);
 
-        echo $token."\n";
-        echo "user created successfully";
+        $role = Role::create([
+            'name' => 'Customer',
+        ]);
+
+        $token = Str::random(80);
+        $role->users()->create([
+            'api_token' => hash('sha256', $token),
+            'name' => "Customer Name",
+            'email' => "customer@hotmail.com",
+            'password' => Hash::make("admin12345"),
+        ]);
+
     }
 }

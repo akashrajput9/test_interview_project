@@ -1,7 +1,9 @@
 <?php
 
 namespace App\http\Helpers;
-use Illuminate\Support\Facades\Validator;
+
+use Illuminate\Support\Facades\Validator as FacadesValidator;
+use Validator;
 
 class ApiResponse {
     public static function success($message,$code,$data){
@@ -22,7 +24,7 @@ class ApiResponse {
         ];
     }
 
-    public static function validatorFail(Validator $validator){
+    public static function validatorFail($validator){
         return self::fail("Validation error",401,$validator->errors()->all());
     }
 }

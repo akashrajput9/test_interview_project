@@ -11,10 +11,14 @@ class Page extends Model
 
     public static function boot(){
         parent::boot();
-        static::createing(function($model){
-            $prevPage = $this->where('book_id',$model->id)->orderBy("book_id","desc")->first();
+        static::creating(function($model){
+            $prevPage = $model->where('book_id',$model->book->id)->orderBy("book_id","desc")->first();
             $model->page_no = $prevPage?$prevPage->book_id+1:1;
         });
+    }
+
+    public function book(){
+        return $this->belongsTo(Book::class);
     }
 
 

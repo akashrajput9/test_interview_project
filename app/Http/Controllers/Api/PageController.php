@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Book;
 use App\Http\Controllers\Controller;
 use App\http\Helpers\ApiResponse;
 use App\Page;
@@ -42,17 +43,19 @@ class PageController extends Controller
 
         $validated = Validator::make($request->all(),[
             "name" => "required|max:191",
+            "book_id" => "required|exists:books,id",
         ]);
         if($validated->fails()){
             return ApiResponse::validatorFail($validated);
         }
 
         try{
-            $page = Page::create([
+            $book = Book::find($request->book_id);
+            $book->pages()->create([
                 'name' => $request->name,
             ]);
 
-            return ApiResponse::success("Page created successfully!",200,$page);
+            return ApiResponse::success("Page created successfully!",200,$book);
         }catch(\Exception $e){
             return ApiResponse::fail("Exception",400,$e->getMessage());
         }
