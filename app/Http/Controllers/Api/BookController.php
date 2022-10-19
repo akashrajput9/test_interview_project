@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use App\Book;
+use App\Category;
 use App\Http\Controllers\Controller;
+use App\http\Helpers\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class BookController extends Controller
 {
@@ -16,6 +19,8 @@ class BookController extends Controller
     public function index()
     {
         //
+        $books = Book::paginate(15);
+        return ApiResponse::success("books fetched successfully!",200,$books);
     }
 
     /**
@@ -37,6 +42,23 @@ class BookController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(),[
+            'book_name' => "required|unique:books,book_name",
+            'author_name' => "required",
+            'category_id' => 'required|exists:categories,id',
+        ]);
+        if($validator->fails()){
+            return ApiResponse::validatorFail($validator);
+        }
+
+        $category = Category::with("books")->findOrFail($request->category_id);
+        $category->books()->create([
+            'book_name' => $request->book_name,
+            'author_name' => $request->author_name,
+        ]);
+        return ApiResponse::success("Book Created successfully!",200,$category);
+
+
     }
 
     /**
@@ -71,6 +93,18 @@ class BookController extends Controller
     public function update(Request $request, Book $book)
     {
         //
+        $validator = Validator::make($request->all(),[
+            'book_name' => "required|max:191",
+            'author_name' => "required|max:191",
+        ]);
+        if($validator->fails()){
+            return ApiResponse::validatorFail($validator);
+        }
+
+        $book->author_name = $request->author_name;
+        $book->book_name = $request->book_name;
+        $book->save();
+        return ApiResponse::success("book updaed successfully!",200,$book);
     }
 
     /**
@@ -82,5 +116,7 @@ class BookController extends Controller
     public function destroy(Book $book)
     {
         //
+        $book->delete();
+        return ApiResponse::success("Book deleted successfully!",200,$book);
     }
 }

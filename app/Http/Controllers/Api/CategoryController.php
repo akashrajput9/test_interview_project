@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Book;
 use App\Category;
 use App\Http\Controllers\Controller;
+use App\http\Helpers\ApiResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Validator;
 
 class CategoryController extends Controller
 {
@@ -16,6 +19,8 @@ class CategoryController extends Controller
     public function index()
     {
         //
+
+        return Category::paginate(15);
     }
 
     /**
@@ -37,6 +42,18 @@ class CategoryController extends Controller
     public function store(Request $request)
     {
         //
+        $validator = Validator::make($request->all(),[
+            'name' => "required|unique:categories,name",
+        ]);
+        if($validator->fails()){
+            return ApiResponse::validatorFail($validator);
+        }
+
+        $category = Category::create([
+            'name'  => $request->name,
+        ]);
+
+        return ApiResponse::success("Category Created successfully!",200,$category);
     }
 
     /**
@@ -71,6 +88,17 @@ class CategoryController extends Controller
     public function update(Request $request, Category $category)
     {
         //
+
+        $validator = Validator::make($request->all(),[
+            'name' => "required|unique:categories,name",
+        ]);
+        if($validator->fails()){
+            return ApiResponse::validatorFail($validator);
+        }
+
+        $category->name = $request->name;
+        $category->save();
+        return ApiResponse::success("Category updated successfully!",200,$category);
     }
 
     /**
@@ -82,5 +110,8 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         //
+
+        $category->delete();
+        return ApiResponse::success("category deleted successfully!",200,$category);
     }
 }
