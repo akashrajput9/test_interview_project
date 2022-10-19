@@ -18,17 +18,8 @@ class PageController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
+        $pages = Page::get();
+        return ApiResponse::success('Pages found',200,$pages);
     }
 
     /**
@@ -57,7 +48,7 @@ class PageController extends Controller
 
             return ApiResponse::success("Page created successfully!",200,$book);
         }catch(\Exception $e){
-            return ApiResponse::fail("Exception",400,$e->getMessage());
+            return ApiResponse::fail("Exception",500,$e->getMessage());
         }
 
 
@@ -67,45 +58,49 @@ class PageController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Page  $page
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function show(Page $page)
+    public function show($id)
     {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Page  $page
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Page $page)
-    {
-        //
+        $page = Page::findOrFail($id);
+        return ApiResponse::success('Page found',200,$page);
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Page  $page
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Page $page)
+    public function update(Request $request, $id)
     {
-        //
+        $validated = Validator::make($request->all(),[
+            "name" => "required|max:191"
+        ]);
+        if($validated->fails()){
+            return ApiResponse::validatorFail($validated);
+        }
+
+        try{
+            Page::findOrFail($id)->update(['name' => $request->name]);
+            $page = Page::findOrFail($id);
+            return ApiResponse::success("Page updated successfully!",200,$page);
+        }catch(\Exception $e){
+            return ApiResponse::fail("Exception",500,$e->getMessage());
+        }
     }
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Page  $page
+     * @param  $id
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Page $page)
+    public function destroy($id)
     {
-        //
+        Page::findOrFail($id)->delete();
+        return ApiResponse::success('Page Deleted',204);
     }
 }
