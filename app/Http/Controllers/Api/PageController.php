@@ -16,9 +16,17 @@ class PageController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $pages = Page::get();
+        $validated = Validator::make($request->all(),[
+            'book_id' => "required|exists:books,id",
+        ]);
+        if($validated->fails()){
+            return ApiResponse::validatorFail($validated);
+        }
+        $pages = Book::with(["pages" => function($q){
+            $q->orderBy("page_no","asc");
+        }])->find($request->book_id);
         return ApiResponse::success('Pages found',200,$pages);
     }
 
@@ -100,7 +108,7 @@ class PageController extends Controller
      */
     public function destroy($id)
     {
-        Page::findOrFail($id)->delete();
-        return ApiResponse::success('Page Deleted',204);
+        $page = Page::findOrFail($id)->delete();
+        return ApiResponse::success('Page Deleted',204,$page);
     }
 }
