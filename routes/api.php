@@ -22,7 +22,8 @@ Route::post("/login","Auth\LoginController@login");
 
 Route::group(['middleware' => "auth:api","namespace" => "Api"],function(){
     Route::resource("user","UserController");
+    Route::resource("category","CategoryController");
+    Route::resource("book","BookController");
     Route::resource("page","PageController");
-    Route::resource('book','BookController');
 
 });
