@@ -15,6 +15,10 @@ class CreatePagesTable extends Migration
     {
         Schema::create('pages', function (Blueprint $table) {
             $table->bigIncrements('id');
+            //book page number just for order of the pages according to book
+            $table->bigInteger("page_no");
+            $table->string("name");
+            $table->bigInteger("book_id")->refference("id")->on("books");
             $table->timestamps();
         });
     }

@@ -44,7 +44,7 @@ class UserController extends Controller
     public function store(UserStoreRequest $request)
     {
         //
-        
+
 
         try{
             User::create([
@@ -98,7 +98,7 @@ class UserController extends Controller
 
         return redirect()->back()->with(["successMsg" => "User updated successfully"]);
 
-        
+
     }
 
     /**

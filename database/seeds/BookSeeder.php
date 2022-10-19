@@ -1,5 +1,9 @@
 <?php
 
+use App\Book;
+use App\Category;
+use App\CategoryBook;
+use App\http\Helpers\AuthHelper;
 use Illuminate\Database\Seeder;
 
 class BookSeeder extends Seeder
@@ -11,6 +15,19 @@ class BookSeeder extends Seeder
      */
     public function run()
     {
-        //
+
+        AuthHelper::setDefaultAuth();
+
+        foreach(Category::get() as $category){
+
+            $category->books()->create([
+                "book_name" => "7 Habits of highly effective people",
+                "author_name" => "Stephen R. Covey",
+            ]);
+        }
+        // Book::firstOrCreate([
+        //     "book_name" => "Rich Dad Poor Dad",
+        //     "author_name" => "Robert T Kiosaki",
+        // ]);
     }
 }
